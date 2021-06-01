@@ -1987,6 +1987,52 @@ function _playAnimation(animation) {
 
 /***/ }),
 
+/***/ "./src/main/graphics/sprites/DoorSprite.ts":
+/*!*************************************************!*\
+  !*** ./src/main/graphics/sprites/DoorSprite.ts ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _ImageSupplier__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ImageSupplier */ "./src/main/graphics/ImageSupplier.ts");
+/* harmony import */ var _Sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Sprite */ "./src/main/graphics/sprites/Sprite.ts");
+/* harmony import */ var _types_Colors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../types/Colors */ "./src/main/types/Colors.ts");
+/* harmony import */ var _utils_MemoUtils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/MemoUtils */ "./src/main/utils/MemoUtils.ts");
+
+
+
+
+class DoorSprite extends _Sprite__WEBPACK_IMPORTED_MODULE_1__.default {
+    constructor(door, paletteSwaps, openFilename, closedFilename) {
+        super({ dx: 0, dy: 0 });
+        this._door = door;
+        this._paletteSwaps = paletteSwaps;
+        this._imageCache = {};
+        this._openFilename = openFilename;
+        this._closedFilename = closedFilename;
+    }
+    /**
+     * @override {@link Sprite#getImage}
+     */
+    getImage() {
+        const door = this._door;
+        const { isOpen } = door;
+        return (0,_utils_MemoUtils__WEBPACK_IMPORTED_MODULE_3__.memoize)(`${isOpen}`, () => this._getImage(), this._imageCache);
+    }
+    _getImage() {
+        const door = this._door;
+        const filename = door.isOpen ? this._openFilename : this._closedFilename;
+        return new _ImageSupplier__WEBPACK_IMPORTED_MODULE_0__.default([filename], _types_Colors__WEBPACK_IMPORTED_MODULE_2__.default.WHITE, this._paletteSwaps, []).get();
+    }
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DoorSprite);
+
+
+/***/ }),
+
 /***/ "./src/main/graphics/sprites/EquipmentSprite.ts":
 /*!******************************************************!*\
   !*** ./src/main/graphics/sprites/EquipmentSprite.ts ***!
@@ -2004,6 +2050,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_TemplateUtils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/TemplateUtils */ "./src/main/utils/TemplateUtils.ts");
 /* harmony import */ var _ImageUtils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../ImageUtils */ "./src/main/graphics/ImageUtils.ts");
 /* harmony import */ var _types_Directions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../types/Directions */ "./src/main/types/Directions.ts");
+/* harmony import */ var _utils_MemoUtils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utils/MemoUtils */ "./src/main/utils/MemoUtils.ts");
 
 
 
@@ -2011,14 +2058,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function _memoize(key, valueSupplier, cache) {
-    if (cache[key]) {
-        return cache[key];
-    }
-    const value = valueSupplier(key);
-    cache[key] = value;
-    return value;
-}
+
 class EquipmentSprite extends _Sprite__WEBPACK_IMPORTED_MODULE_1__.default {
     constructor(spriteConfig, equipment, paletteSwaps) {
         super(spriteConfig.offsets);
@@ -2036,7 +2076,7 @@ class EquipmentSprite extends _Sprite__WEBPACK_IMPORTED_MODULE_1__.default {
         const unit = this._equipment.unit;
         const activity = unit.activity.toLowerCase();
         const direction = _types_Directions__WEBPACK_IMPORTED_MODULE_6__.default.toLegacyDirection(unit.direction);
-        return _memoize(`${activity}_${direction}`, () => this._getImage(), this._imageCache);
+        return (0,_utils_MemoUtils__WEBPACK_IMPORTED_MODULE_7__.memoize)(`${activity}_${direction}`, () => this._getImage(), this._imageCache);
     }
     _getImage() {
         const unit = this._equipment.unit;
@@ -2204,6 +2244,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _EquipmentSprite__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./EquipmentSprite */ "./src/main/graphics/sprites/EquipmentSprite.ts");
 /* harmony import */ var _SpriteConfig__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SpriteConfig */ "./src/main/graphics/sprites/SpriteConfig.ts");
 /* harmony import */ var _StaticSpriteConfig__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./StaticSpriteConfig */ "./src/main/graphics/sprites/StaticSpriteConfig.ts");
+/* harmony import */ var _DoorSprite__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./DoorSprite */ "./src/main/graphics/sprites/DoorSprite.ts");
+
 
 
 
@@ -2214,13 +2256,19 @@ function createStaticSprite(spriteName, paletteSwaps = {}) {
     const spriteConfig = _StaticSpriteConfig__WEBPACK_IMPORTED_MODULE_5__.StaticSpriteConfigs[spriteName];
     return new _StaticSprite__WEBPACK_IMPORTED_MODULE_0__.default(spriteConfig, paletteSwaps);
 }
-function createUnitSprite(spriteName, unit, paletteSwaps = {}) {
-    const spriteConfig = _SpriteConfig__WEBPACK_IMPORTED_MODULE_4__.SpriteConfigs[spriteName];
-    return new _UnitSprite__WEBPACK_IMPORTED_MODULE_1__.default(spriteConfig, unit, paletteSwaps);
+function createUnitSprite(unit) {
+    const { unitClass } = unit;
+    const spriteConfig = _SpriteConfig__WEBPACK_IMPORTED_MODULE_4__.SpriteConfigs[unitClass.sprite];
+    return new _UnitSprite__WEBPACK_IMPORTED_MODULE_1__.default(spriteConfig, unit, unitClass.paletteSwaps);
 }
-function createEquipmentSprite(spriteName, equipment, paletteSwaps = {}) {
-    const spriteConfig = _SpriteConfig__WEBPACK_IMPORTED_MODULE_4__.SpriteConfigs[spriteName];
-    return new _EquipmentSprite__WEBPACK_IMPORTED_MODULE_3__.default(spriteConfig, equipment, paletteSwaps);
+function createEquipmentSprite(equipment) {
+    const { equipmentClass } = equipment;
+    const spriteConfig = _SpriteConfig__WEBPACK_IMPORTED_MODULE_4__.SpriteConfigs[equipmentClass.sprite];
+    return new _EquipmentSprite__WEBPACK_IMPORTED_MODULE_3__.default(spriteConfig, equipment, equipmentClass.paletteSwaps);
+}
+function createDoorSprite(door) {
+    const direction = door.direction.toLowerCase();
+    return new _DoorSprite__WEBPACK_IMPORTED_MODULE_6__.default(door, {}, `door_${direction}_open`, `door_${direction}_closed`);
 }
 const ProjectileSprites = {
     ARROW: (direction, paletteSwaps) => new _ProjectileSprite__WEBPACK_IMPORTED_MODULE_2__.default(direction, 'arrow', paletteSwaps, { dx: 0, dy: -8 })
@@ -2231,7 +2279,8 @@ const ProjectileSprites = {
     ARROW: ProjectileSprites.ARROW,
     createStaticSprite,
     createUnitSprite,
-    createEquipmentSprite
+    createEquipmentSprite,
+    createDoorSprite
 });
 
 
@@ -2322,6 +2371,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _types_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../types/types */ "./src/main/types/types.ts");
 /* harmony import */ var _utils_TemplateUtils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/TemplateUtils */ "./src/main/utils/TemplateUtils.ts");
 /* harmony import */ var _ImageUtils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../ImageUtils */ "./src/main/graphics/ImageUtils.ts");
+/* harmony import */ var _utils_MemoUtils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utils/MemoUtils */ "./src/main/utils/MemoUtils.ts");
 
 
 
@@ -2329,14 +2379,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function _memoize(key, valueSupplier, cache) {
-    if (cache[key]) {
-        return cache[key];
-    }
-    const value = valueSupplier(key);
-    cache[key] = value;
-    return value;
-}
+
 class UnitSprite extends _Sprite__WEBPACK_IMPORTED_MODULE_1__.default {
     constructor(spriteConfig, unit, paletteSwaps) {
         super(spriteConfig.offsets);
@@ -2352,7 +2395,7 @@ class UnitSprite extends _Sprite__WEBPACK_IMPORTED_MODULE_1__.default {
         const unit = this._unit;
         const activity = unit.activity.toLowerCase();
         const direction = _types_Directions__WEBPACK_IMPORTED_MODULE_3__.default.toLegacyDirection(unit.direction);
-        return _memoize(`${activity}_${direction}`, () => this._getImage(), this._imageCache);
+        return (0,_utils_MemoUtils__WEBPACK_IMPORTED_MODULE_7__.memoize)(`${activity}_${direction}`, () => this._getImage(), this._imageCache);
     }
     _getImage() {
         const unit = this._unit;
@@ -2548,7 +2591,7 @@ function createScrollOfFloorFire(damage) {
 function _createMapEquipment(equipmentClass, { x, y }) {
     const sprite = _graphics_sprites_SpriteFactory__WEBPACK_IMPORTED_MODULE_3__.default.createStaticSprite(equipmentClass.mapIcon, equipmentClass.paletteSwaps);
     const inventoryItem = _createInventoryWeapon(equipmentClass);
-    return new _MapItem__WEBPACK_IMPORTED_MODULE_2__.default({ x, y }, equipmentClass.char, sprite, inventoryItem);
+    return new _MapItem__WEBPACK_IMPORTED_MODULE_2__.default({ x, y }, sprite, inventoryItem);
 }
 function _createInventoryWeapon(equipmentClass) {
     const onUse = (item, unit) => {
@@ -2560,12 +2603,12 @@ function _getItemSuppliers(level) {
     const createMapPotion = ({ x, y }) => {
         const sprite = _graphics_sprites_SpriteFactory__WEBPACK_IMPORTED_MODULE_3__.default.createStaticSprite('map_potion');
         const inventoryItem = createPotion(40);
-        return new _MapItem__WEBPACK_IMPORTED_MODULE_2__.default({ x, y }, 'K', sprite, inventoryItem);
+        return new _MapItem__WEBPACK_IMPORTED_MODULE_2__.default({ x, y }, sprite, inventoryItem);
     };
     const createFloorFireScroll = ({ x, y }) => {
         const sprite = _graphics_sprites_SpriteFactory__WEBPACK_IMPORTED_MODULE_3__.default.createStaticSprite('map_scroll');
         const inventoryItem = createScrollOfFloorFire(80);
-        return new _MapItem__WEBPACK_IMPORTED_MODULE_2__.default({ x, y }, 'K', sprite, inventoryItem);
+        return new _MapItem__WEBPACK_IMPORTED_MODULE_2__.default({ x, y }, sprite, inventoryItem);
     };
     return [createMapPotion, createFloorFireScroll];
 }
@@ -2645,10 +2688,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 class MapItem {
-    constructor({ x, y }, char, sprite, inventoryItem) {
+    constructor({ x, y }, sprite, inventoryItem) {
         this.x = x;
         this.y = y;
-        this.char = char;
         this.sprite = sprite;
         this.inventoryItem = inventoryItem;
     }
@@ -2675,8 +2717,7 @@ function createArrow({ x, y }, direction) {
         x,
         y,
         direction,
-        sprite: _graphics_sprites_SpriteFactory__WEBPACK_IMPORTED_MODULE_0__.default.ARROW(direction, {}),
-        char: 'x'
+        sprite: _graphics_sprites_SpriteFactory__WEBPACK_IMPORTED_MODULE_0__.default.ARROW(direction, {})
     };
 }
 
@@ -2698,11 +2739,12 @@ __webpack_require__.r(__webpack_exports__);
 
 class Equipment {
     constructor(equipmentClass, inventoryItem) {
+        this.equipmentClass = equipmentClass;
         this.name = equipmentClass.name;
         this.slot = equipmentClass.slot;
         this.inventoryItem = inventoryItem;
         this.damage = equipmentClass.damage;
-        this.sprite = _graphics_sprites_SpriteFactory__WEBPACK_IMPORTED_MODULE_0__.default.createEquipmentSprite(equipmentClass.sprite, this, equipmentClass.paletteSwaps);
+        this.sprite = _graphics_sprites_SpriteFactory__WEBPACK_IMPORTED_MODULE_0__.default.createEquipmentSprite(this);
     }
     attach(unit) {
         this.unit = unit;
@@ -4589,9 +4631,8 @@ const LIFE_PER_TURN_MULTIPLIER = 0.0005;
 class Unit {
     constructor(unitClass, name, controller, level, { x, y }) {
         var _a;
-        this.char = '@';
         this.unitClass = unitClass;
-        this.sprite = _graphics_sprites_SpriteFactory__WEBPACK_IMPORTED_MODULE_10__.default.createUnitSprite(unitClass.sprite, this, unitClass.paletteSwaps);
+        this.sprite = _graphics_sprites_SpriteFactory__WEBPACK_IMPORTED_MODULE_10__.default.createUnitSprite(this);
         this.inventory = new _items_InventoryMap__WEBPACK_IMPORTED_MODULE_1__.default();
         this.equipment = new _items_equipment_EquipmentMap__WEBPACK_IMPORTED_MODULE_2__.default();
         this.x = x;
@@ -5377,6 +5418,29 @@ function comparingReversed(mapFunction) {
 function average(list) {
     const sum = list.reduce((a, b) => a + b);
     return sum / list.length;
+}
+
+
+
+/***/ }),
+
+/***/ "./src/main/utils/MemoUtils.ts":
+/*!*************************************!*\
+  !*** ./src/main/utils/MemoUtils.ts ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "memoize": () => (/* binding */ memoize)
+/* harmony export */ });
+function memoize(key, valueSupplier, cache) {
+    if (cache[key]) {
+        return cache[key];
+    }
+    const value = valueSupplier(key);
+    cache[key] = value;
+    return value;
 }
 
 

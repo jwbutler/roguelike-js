@@ -23,4 +23,3 @@ const StaticSpriteConfigs: ({ [name: string]: StaticSpriteConfig }) = {
 
 export { StaticSpriteConfigs };
 export type { StaticSpriteConfig };
-

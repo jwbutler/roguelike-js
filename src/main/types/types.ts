@@ -1,5 +1,5 @@
 import Sprite from '../graphics/sprites/Sprite';
-import Colors, { Color } from './Colors';
+import { Color } from './Colors';
 
 enum Activity {
   STANDING = 'STANDING',
@@ -22,9 +22,10 @@ interface Direction {
 }
 
 interface Entity extends Coordinates {
-  char: string,
   sprite: Sprite
 }
+
+interface GameObject extends Entity {}
 
 enum EquipmentSlot {
   MELEE_WEAPON  = 'MELEE_WEAPON',
@@ -111,6 +112,7 @@ export {
   Direction,
   Entity,
   EquipmentSlot,
+  GameObject,
   GameScreen,
   ItemCategory,
   MapLayout,

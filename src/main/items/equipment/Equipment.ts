@@ -6,6 +6,7 @@ import Sprite from '../../graphics/sprites/Sprite';
 import SpriteFactory from '../../graphics/sprites/SpriteFactory';
 
 class Equipment {
+  readonly equipmentClass: EquipmentClass;
   readonly inventoryItem: InventoryItem | null;
   readonly damage?: number;
   readonly sprite: Sprite;
@@ -14,11 +15,12 @@ class Equipment {
   unit?: Unit;
 
   constructor(equipmentClass: EquipmentClass, inventoryItem: InventoryItem | null) {
+    this.equipmentClass = equipmentClass;
     this.name = equipmentClass.name;
     this.slot = equipmentClass.slot;
     this.inventoryItem = inventoryItem;
     this.damage = equipmentClass.damage;
-    this.sprite = SpriteFactory.createEquipmentSprite(equipmentClass.sprite, this, equipmentClass.paletteSwaps);
+    this.sprite = SpriteFactory.createEquipmentSprite(this);
   }
 
   attach(unit: Unit) {

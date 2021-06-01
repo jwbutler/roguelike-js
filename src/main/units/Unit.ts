@@ -18,7 +18,6 @@ const LIFE_PER_TURN_MULTIPLIER = 0.0005;
 
 class Unit implements Entity {
   readonly unitClass: UnitClass;
-  readonly char = '@';
   readonly sprite: Sprite;
   inventory: InventoryMap;
   equipment: EquipmentMap;
@@ -42,7 +41,7 @@ class Unit implements Entity {
 
   constructor(unitClass: UnitClass, name: string, controller: UnitController, level: number, { x, y }: Coordinates) {
     this.unitClass = unitClass;
-    this.sprite = SpriteFactory.createUnitSprite(unitClass.sprite, this, unitClass.paletteSwaps);
+    this.sprite = SpriteFactory.createUnitSprite(this);
     this.inventory = new InventoryMap();
     this.equipment = new EquipmentMap();
 

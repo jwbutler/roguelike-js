@@ -7,20 +7,11 @@ import { replaceAll } from '../ImageUtils';
 import Directions from '../../types/Directions';
 import Equipment from '../../items/equipment/Equipment';
 import type { SpriteConfig } from './SpriteConfig';
-
-function _memoize<V>(key: string, valueSupplier: (k: string) => V, cache: { [k: string]: V }): V {
-  if (cache[key]) {
-    return cache[key];
-  }
-
-  const value = valueSupplier(key);
-  cache[key] = value;
-  return value;
-}
+import { memoize } from '../../utils/MemoUtils';
 
 class EquipmentSprite extends Sprite {
   private readonly _spriteConfig: SpriteConfig;
-  private _equipment: Equipment;
+  private readonly _equipment: Equipment;
   private readonly _paletteSwaps: PaletteSwaps;
   private readonly _imageCache: { [key: string]: Promise<ImageBitmap> };
 
@@ -41,7 +32,7 @@ class EquipmentSprite extends Sprite {
     const unit = this._equipment.unit!!;
     const activity = unit.activity.toLowerCase();
     const direction = Directions.toLegacyDirection(unit.direction!!);
-    return _memoize(`${activity}_${direction}`, () => this._getImage(), this._imageCache);
+    return memoize(`${activity}_${direction}`, () => this._getImage(), this._imageCache);
   }
 
   _getImage(): Promise<ImageBitmap | null> {

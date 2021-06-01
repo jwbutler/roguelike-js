@@ -6,8 +6,7 @@ function createArrow({ x, y }: Coordinates, direction: Direction): Projectile {
     x,
     y,
     direction,
-    sprite: SpriteFactory.ARROW(direction, {}),
-    char: 'x'
+    sprite: SpriteFactory.ARROW(direction, {})
   };
 }
 

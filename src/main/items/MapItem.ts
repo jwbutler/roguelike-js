@@ -1,18 +1,16 @@
 import InventoryItem from './InventoryItem';
 import Sprite from '../graphics/sprites/Sprite';
-import { Coordinates, Entity } from '../types/types';
+import { Coordinates, GameObject } from '../types/types';
 
-class MapItem implements Entity {
+class MapItem implements GameObject {
   x: number;
   y: number;
-  readonly char: string;
   readonly sprite: Sprite;
   inventoryItem: InventoryItem;
 
-  constructor({ x, y }: Coordinates, char: string, sprite: Sprite, inventoryItem: InventoryItem) {
+  constructor({ x, y }: Coordinates, sprite: Sprite, inventoryItem: InventoryItem) {
     this.x = x;
     this.y = y;
-    this.char = char;
     this.sprite = sprite;
     this.inventoryItem = inventoryItem;
   }

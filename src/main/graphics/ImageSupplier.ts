@@ -44,3 +44,4 @@ class ImageSupplier {
 }
 
 export default ImageSupplier;
+export { ImageDataFunc };

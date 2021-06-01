@@ -1,5 +1,5 @@
 import ImageSupplier from '../ImageSupplier';
-import Sprite, { Offsets } from './Sprite';
+import Sprite from './Sprite';
 import Colors from '../../types/Colors';
 import Unit from '../../units/Unit';
 import Directions from '../../types/Directions';
@@ -7,16 +7,7 @@ import { Activity, PaletteSwaps } from '../../types/types';
 import { fillTemplate } from '../../utils/TemplateUtils';
 import { replaceAll } from '../ImageUtils';
 import { SpriteConfig } from './SpriteConfig';
-
-function _memoize<V>(key: string, valueSupplier: (k: string) => V, cache: { [k: string]: V }): V {
-  if (cache[key]) {
-    return cache[key];
-  }
-
-  const value = valueSupplier(key);
-  cache[key] = value;
-  return value;
-}
+import { memoize } from '../../utils/MemoUtils';
 
 class UnitSprite extends Sprite {
   private readonly _unit: Unit;
@@ -39,7 +30,7 @@ class UnitSprite extends Sprite {
     const unit = this._unit;
     const activity = unit.activity.toLowerCase();
     const direction = Directions.toLegacyDirection(unit.direction!!);
-    return _memoize(`${activity}_${direction}`, () => this._getImage(), this._imageCache);
+    return memoize(`${activity}_${direction}`, () => this._getImage(), this._imageCache);
   }
 
   _getImage(): Promise<ImageBitmap> {

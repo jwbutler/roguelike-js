@@ -17,7 +17,6 @@ interface EquipmentClass {
   readonly mapIcon: string,
   readonly itemCategory: ItemCategory,
   readonly slot: EquipmentSlot,
-  readonly char: string,
   readonly paletteSwaps: PaletteSwaps,
   readonly damage?: number,
   // TODO move these somewhere else - just used to control item spawns

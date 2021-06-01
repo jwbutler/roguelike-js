@@ -52,7 +52,7 @@ function createScrollOfFloorFire(damage: number): InventoryItem {
 function _createMapEquipment(equipmentClass: EquipmentClass, { x, y }: Coordinates): MapItem {
   const sprite = SpriteFactory.createStaticSprite(equipmentClass.mapIcon, equipmentClass.paletteSwaps);
   const inventoryItem: InventoryItem = _createInventoryWeapon(equipmentClass);
-  return new MapItem({ x, y }, equipmentClass.char, sprite, inventoryItem);
+  return new MapItem({ x, y }, sprite, inventoryItem);
 }
 
 function _createInventoryWeapon(equipmentClass: EquipmentClass): InventoryItem {
@@ -68,13 +68,13 @@ function _getItemSuppliers(level: number): MapItemSupplier[] {
   const createMapPotion: MapItemSupplier = ({ x, y }: Coordinates) => {
     const sprite = SpriteFactory.createStaticSprite('map_potion');
     const inventoryItem = createPotion(40);
-    return new MapItem({ x, y }, 'K', sprite, inventoryItem);
+    return new MapItem({ x, y }, sprite, inventoryItem);
   };
 
   const createFloorFireScroll = ({ x, y }: Coordinates) => {
     const sprite = SpriteFactory.createStaticSprite('map_scroll');
     const inventoryItem = createScrollOfFloorFire(80);
-    return new MapItem({ x, y }, 'K', sprite, inventoryItem);
+    return new MapItem({ x, y }, sprite, inventoryItem);
   };
 
   return [createMapPotion, createFloorFireScroll];
